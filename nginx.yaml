@@ -1,0 +1,22 @@
+---
+- name: Configure Worker Node
+  hosts: WorkerNode
+  become: yes
+  tasks:
+    - name: Update package manager cache
+      yum:
+        name: "*"
+        state: latest
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Start and enable Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
